@@ -1,6 +1,6 @@
 {
   "name": "react-native-lockstate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "LockState can tell you if the device is locked / unlocked.",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,9 @@
     "lockstate",
     "lockcomplete"
   ],
+  "repository": {
+    "url": "https://github.com/ruffnote/react-native-lockstate.git"
+  },
   "author": "Mitsuru Hayasaka",
   "license": "MIT",
   "peerDependencies": {
