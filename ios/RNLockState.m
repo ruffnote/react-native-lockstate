@@ -1,15 +1,22 @@
+#import <notify.h>
 
 #import "RNLockState.h"
 
-NSString *const RCTLockCompleteNotification = @"com.apple.springboard.lockcomplete";
+
 NSString *const RCTLockStateNotification = @"com.apple.springboard.lockstate";
+NSString *const RCTLockCompleteNotification = @"com.apple.springboard.lockcomplete";
 
 @implementation RNLockState
+{
+    int notify_token_lockstate;
+    int notify_token_lockcomplete;
+}
 
 - (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
 }
+
 RCT_EXPORT_MODULE()
 
 - (NSArray<NSString *> *)supportedEvents
@@ -19,15 +26,17 @@ RCT_EXPORT_MODULE()
 
 - (void)startObserving
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleLockStateChange:)
-                                                 name:RCTLockCompleteNotification
-                                               object:nil];
+    notify_register_dispatch("com.apple.springboard.lockstate", &notify_token_lockstate, dispatch_get_main_queue(), ^(int token) {
+        uint64_t state = UINT64_MAX;
+        notify_get_state(token, &state);
+        [self handleLockStateChange:state];
+    });
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleLockComplete:)
-                                                 name:RCTLockCompleteNotification
-                                               object:nil];
+    notify_register_dispatch("com.apple.springboard.lockcomplete", &notify_token_lockcomplete, dispatch_get_main_queue(), ^(int token) {
+        uint64_t state = UINT64_MAX;
+        notify_get_state(token, &state);
+        [self handleLockComplete:state];
+    });
 }
 
 - (void)stopObserving
@@ -35,22 +44,18 @@ RCT_EXPORT_MODULE()
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)handleLockStateChange:(NSNotification *)notification
+- (void)handleLockStateChange:(uint64_t)state
 {
-    NSString *newState;
-    
-    if ([notification.name isEqualToString:RCTLockStateNotification]) {
-        [self sendEventWithName:@"lockStateDidChange" body:@{@"lockState"}]
+    if (state == 0) {
+        [self sendEventWithName:@"lockStateDidChange" body:@{@"lockState": @"unlocked"}];
+    } else {
+        [self sendEventWithName:@"lockComplete" body:@{@"lockState": @"locked"}];
     }
 }
 
-- (void)handleLockComplete:(NSNotification *)notification
+- (void)handleLockComplete:(uint64_t)state
 {
-    NSString *newState;
-    newState = (NSString *)notification.name;
-    
-    [self sendEventWithName:@"lockComplete"
-                       body:@{@"lockComplete"}]
+    [self sendEventWithName:@"lockComplete" body:@{@"lockState": @"lockComplete"}];
 }
 
 @end
