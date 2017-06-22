@@ -2,10 +2,6 @@
 
 #import "RNLockState.h"
 
-
-NSString *const RCTLockStateNotification = @"com.apple.springboard.lockstate";
-NSString *const RCTLockCompleteNotification = @"com.apple.springboard.lockcomplete";
-
 @implementation RNLockState
 {
     int notify_token_lockstate;
