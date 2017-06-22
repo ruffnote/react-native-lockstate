@@ -49,7 +49,7 @@ RCT_EXPORT_MODULE()
     if (state == 0) {
         [self sendEventWithName:@"lockStateDidChange" body:@{@"lockState": @"unlocked"}];
     } else {
-        [self sendEventWithName:@"lockComplete" body:@{@"lockState": @"locked"}];
+        [self sendEventWithName:@"lockStateDidChange" body:@{@"lockState": @"locked"}];
     }
 }
 

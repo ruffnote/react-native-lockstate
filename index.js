@@ -11,6 +11,7 @@ class LockState extends NativeEventEmitter
 
     this._eventHandlers = {
       change: new Map(),
+      lockComplete: new Map(),
     };
   }
 
@@ -21,6 +22,13 @@ class LockState extends NativeEventEmitter
     if (type === 'change') {
       this._eventHandlers[type].set(handler, this.addListener(
         'lockStateDidChange',
+        (lockStateData) => {
+          handler(lockStateData);
+        }
+      ));
+    } else if (type === 'lockComplete') {
+      this._eventHandlers[type].set(handler, this.addListener(
+        'lockComplete',
         (lockStateData) => {
           handler(lockStateData);
         }
