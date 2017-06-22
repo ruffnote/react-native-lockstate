@@ -1,6 +1,6 @@
 {
   "name": "react-native-lockstate",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "LockState can tell you if the device is locked / unlocked.",
   "main": "index.js",
   "scripts": {
