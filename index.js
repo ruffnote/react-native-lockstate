@@ -4,7 +4,8 @@ const { RNLockState } = NativeModules;
 
 class LockState extends NativeEventEmitter
 {
-  _eventHandlers: Object
+  _eventHandlers: Object;
+  currentState: ?string;
 
   constructor() {
     super(RNLockState);
@@ -13,6 +14,14 @@ class LockState extends NativeEventEmitter
       change: new Map(),
       lockComplete: new Map(),
     };
+    this.currentState = 'unknown';
+
+    this.addListener(
+      'lockStateDidChange',
+      (lockStateData) => {
+        this.currentState = lockStateData.lockState;
+      }
+    );
   }
 
   addEventListener(
