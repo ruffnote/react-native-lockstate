@@ -1,5 +1,5 @@
-const NativeEventEmitter = require('NativeEventEmitter');
-const NativeModules = require('NativeModules');
+import { NativeEventEmitter, NativeModules } from 'react-native';
+
 const { RNLockState } = NativeModules;
 
 class LockState extends NativeEventEmitter
