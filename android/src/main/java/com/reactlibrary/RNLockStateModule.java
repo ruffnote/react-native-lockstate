@@ -16,13 +16,14 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 public class RNLockStateModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
 
-  private final ReactApplicationContext reactContext;
+  private ReactApplicationContext mReactContext;
   private Activity mCurrentActivity;
 
   public RNLockStateModule(ReactApplicationContext reactContext,  Activity activity) {
     super(reactContext);
     mCurrentActivity = activity;
-    reactContext.addLifecycleEventListener(this);
+    mReactContext = reactContext;
+    mReactContext.addLifecycleEventListener(this);
   }
 
   @Override
@@ -32,7 +33,7 @@ public class RNLockStateModule extends ReactContextBaseJavaModule implements Lif
 
   @Override
   public void onHostPause() {
-    KeyguardManager myKM = (KeyguardManager) reactContext.getSystemService(Context.KEYGUARD_SERVICE);
+    KeyguardManager myKM = (KeyguardManager) mReactContext.getSystemService(Context.KEYGUARD_SERVICE);
 
     if(myKM.inKeyguardRestrictedInputMode()) {
       getReactApplicationContext()
@@ -42,9 +43,14 @@ public class RNLockStateModule extends ReactContextBaseJavaModule implements Lif
   }
 
   @Override
-  public void onHostStart() {
+  public void onHostResume() {
     getReactApplicationContext()
       .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
       .emit("unlocked", null);
+  }
+
+  @Override
+  public void onHostDestroy() {
+      // Activity `onDestroy`
   }
 }
