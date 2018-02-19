@@ -2,7 +2,6 @@ package com.reactlibrary;
 
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.app.Activity;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -17,11 +16,9 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 public class RNLockStateModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
 
   private ReactApplicationContext mReactContext;
-  private Activity mCurrentActivity;
 
-  public RNLockStateModule(ReactApplicationContext reactContext,  Activity activity) {
+  public RNLockStateModule(ReactApplicationContext reactContext) {
     super(reactContext);
-    mCurrentActivity = activity;
     mReactContext = reactContext;
     mReactContext.addLifecycleEventListener(this);
   }

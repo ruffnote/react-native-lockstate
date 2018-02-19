@@ -1,8 +1,6 @@
 
 package com.reactlibrary;
 
-import android.app.Activity;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -13,16 +11,11 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
 public class RNLockStatePackage implements ReactPackage {
-    private Activity mCurrentActivity;
-
-      public RNLockStatePackage(Activity activity) {
-          mCurrentActivity = activity;
-      }
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
       return Arrays.<NativeModule>asList(
-            new RNLockStateModule(reactContext, mCurrentActivity)
+            new RNLockStateModule(reactContext)
         );
     }
 
